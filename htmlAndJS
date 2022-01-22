@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Countries</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<form id="form1" class="form1">
+    <input id="input1" class="input1" autofocus required>
+    <button id="button1">Find</button>
+</form>
+<div id="placeForCountries"></div>
+<script>
+    const form = document.getElementById('form1');
+    const inp = document.getElementById('input1');
+    const div = document.getElementById('placeForCountries');
+    form.addEventListener('submit', getCountr);
+    function getCountr(e) {
+        let n = 0;
+        e.preventDefault();
+        const MyInput = document.getElementById('input1').value;
+        fetch("https://restcountries.com/v3.1/all")
+            .then((response) => {
+                return response.json();
+            })
+            .then((resp) => {
+                resp.forEach(
+                    elem => {
+                        if (elem.name.common === MyInput) {
+                            const currencyArray = Object.values(elem.currencies);
+                            div.insertAdjacentHTML("afterend", `</d><h1>${MyInput}</h1><br><b>Flag: </b><br><img src="${elem.flags.png}"> <div><b>Capital: </b>${elem.capital}</div><br><div><b>Region: </b>${elem.region}</div><br><div><b>Currency: </b>${currencyArray[0].name}</div><b>Wiki Reference : </b><a href="https://en.wikipedia.org/wiki/${MyInput}" target="_blank">More</a><hr>`);
+                            document.getElementById('input1').value = null;
+                            inp.focus();
+                            qq = "smt";
+                        }else {
+                            n++;
+                            if (n == 250){
+                                n = 0;
+                                n++;
+                                alert("Not Found")
+                                document.getElementById('input1').value = null;
+                                inp.focus();
+                            }
+                        }
+                    }
+                )
+            })
+    }
+</script>
+</body>
+</html>
